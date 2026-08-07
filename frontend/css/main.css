@@ -1,0 +1,508 @@
+/* ============================================================
+   ByteShift — Design tokens
+   Paleta com FUNÇÃO: verde é a cor primária da marca; laranja
+   marca unidades decimais; roxo marca unidades binárias. A cor
+   ensina o conceito central do projeto (decimal vs binário),
+   não é só decoração.
+
+   Escrito mobile-first: os estilos base já são os do celular:
+   a media query só ADICIONA regras pra telas maiores, nunca
+   sobrescreve um layout desktop que veio primeiro.
+   ============================================================ */
+
+:root {
+  /* Superfícies */
+  --color-bg: #0a0d0b;
+  --color-surface: #121712;
+  --color-surface-raised: #171d17;
+  --color-border: #26302a; /* divisórias decorativas, não precisam de contraste alto */
+  --color-border-input: #556a5e; /* borda de campo interativo — testada em 3.36:1 contra o fundo (WCAG 1.4.11) */
+
+  /* Texto */
+  --color-text: #e4e9e6;
+  --color-text-dim: #7c8880;
+
+  /* Marca e função */
+  --color-primary: #4cc38a;
+  --color-primary-dim: #337a58;
+  --color-decimal: #e8871e;
+  --color-binary: #7b5cfa; /* só usada em elementos decorativos pequenos (bolinhas), nunca como texto — abaixo de 4.5:1 pra texto normal */
+  --color-danger: #ff5c5c;
+
+  /* Tipografia */
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+
+  /* Espaçamento (escala de 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --radius: 6px;
+
+  /* Toque mínimo recomendado (WCAG 2.5.5 / Material) pra alvos tocáveis */
+  --touch-target: 44px;
+}
+
+/* Reset enxuto — só o necessário, sem framework */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Foco visível — obrigatório para navegação por teclado, nunca removido */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   Topbar — base mobile: empilhado; desktop: em linha
+   ============================================================ */
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.topbar__wordmark {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+.topbar__wordmark span {
+  color: var(--color-primary);
+}
+
+.topbar__tagline {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+@media (min-width: 720px) {
+  .topbar {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+  }
+
+  .topbar__wordmark {
+    font-size: 22px;
+  }
+}
+
+/* ============================================================
+   Grid principal — base mobile: 1 coluna; desktop: 2x2
+   ============================================================ */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-6);
+}
+
+@media (min-width: 720px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+    padding: 0 var(--space-5) var(--space-7);
+  }
+}
+
+/* ============================================================
+   Card — a "janelinha de terminal", elemento-assinatura da página
+   ============================================================ */
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card__chrome {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card__dots {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.card__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.card__dot--primary {
+  background-color: var(--color-primary);
+}
+
+.card__dot--decimal {
+  background-color: var(--color-decimal);
+}
+
+.card__dot--binary {
+  background-color: var(--color-binary);
+}
+
+.card__title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+.card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---- Campo de entrada, estilo prompt de comando ---- */
+
+.card__input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+
+.card__input-row:focus-within {
+  border-color: var(--color-primary);
+}
+
+.card__prompt {
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  font-size: 15px;
+  user-select: none;
+}
+
+.card__value-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 16px; /* >=16px evita zoom automático no iOS ao focar o campo */
+  padding: var(--space-1) 0;
+}
+
+.card__value-input:focus {
+  outline: none;
+}
+
+.card__value-input::-webkit-outer-spin-button,
+.card__value-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.card__unit-select {
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--color-border-input);
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  min-height: var(--touch-target);
+  padding: var(--space-1) 0 var(--space-1) var(--space-3);
+  cursor: pointer;
+}
+
+.card__unit-select:focus {
+  outline: none;
+  color: var(--color-text);
+}
+
+/* ---- Lista de conversões ---- */
+
+.card__results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: opacity 150ms ease;
+}
+
+/* aplicada via JS enquanto uma nova conversão está em voo — dá o
+   feedback de "algo está acontecendo" sem esconder o resultado anterior */
+.card__results--loading {
+  opacity: 0.45;
+}
+
+.card__result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-1);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  border-bottom: 1px solid transparent;
+}
+
+.card__result-row:not(:last-child) {
+  border-bottom-color: var(--color-border);
+}
+
+.card__result-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-dim);
+  min-width: 0;
+}
+
+.card__result-badge {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card__result-badge--decimal {
+  background-color: var(--color-decimal);
+}
+
+.card__result-badge--binary {
+  background-color: var(--color-binary);
+}
+
+.card__result-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ---- Indicador de carregamento, estilo prompt piscando ---- */
+
+.card__loading {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text-dim);
+  display: none;
+}
+
+.card__loading--visible {
+  display: block;
+}
+
+.card__loading::after {
+  content: "_";
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---- Botão "mostrar tudo", estilo comando de terminal ---- */
+
+.card__toggle {
+  align-self: flex-start;
+  min-height: var(--touch-target);
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+  padding: var(--space-1) 0;
+}
+
+.card__toggle:hover,
+.card__toggle:focus-visible {
+  color: var(--color-primary);
+}
+
+.card__toggle::before {
+  content: "$ ";
+  color: var(--color-primary-dim);
+}
+
+/* ---- Estado de erro, dentro do próprio card ---- */
+
+.card__error {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-danger);
+  display: none;
+}
+
+.card__error--visible {
+  display: block;
+}
+
+/* ============================================================
+   Seção de cenários contextuais (Fase 8)
+
+   De propósito NÃO reaproveita o chrome de 3 pontinhos dos cards de
+   conversão direta — o objetivo é a pessoa bater o olho e já saber
+   que aquilo ali responde uma pergunta (ex: "quanto tempo demora"),
+   não converte uma unidade isolada.
+   ============================================================ */
+
+.scenario-section {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-6);
+}
+
+.scenario-section__heading {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--space-2);
+  padding-bottom: var(--space-2);
+  /* sublinhado em degradê das duas cores funcionais — sinaliza "isto
+     combina os dois conceitos", sem precisar de mais texto explicando */
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, var(--color-decimal), var(--color-binary)) 1;
+}
+
+.scenario-section__heading::before {
+  content: "$ ";
+  color: var(--color-primary-dim);
+}
+
+.scenario-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.scenario-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.scenario-card__chrome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.scenario-card__icon {
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  font-size: 13px;
+}
+
+.scenario-card__title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.scenario-card__description {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-dim);
+}
+
+.scenario-card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.scenario-card__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.scenario-card__operator {
+  align-self: center;
+  font-family: var(--font-mono);
+  color: var(--color-text-dim);
+  font-size: 13px;
+}
+
+.scenario-card__result {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--color-primary);
+  margin: 0;
+  min-height: 24px;
+}
+
+@media (min-width: 720px) {
+  .scenario-card__fields {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .scenario-card__field {
+    flex: 1;
+  }
+}

@@ -1,0 +1,28 @@
+[project]
+name = "unit-converter-backend"
+version = "0.1.0"
+description = "API de conversão de unidades técnicas (armazenamento, velocidade, rede, capacidade de dispositivos)."
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.141.1",
+    "uvicorn>=0.52.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+]
+
+[tool.pytest.ini_options]
+# Onde o pytest procura os testes, sem precisar apontar o caminho toda vez.
+testpaths = ["app/tests"]
+
+# --cov=app: mede cobertura do pacote inteiro, não só dos arquivos testados.
+# --cov-report=term-missing: mostra no terminal quais linhas específicas
+# não foram cobertas, não só a porcentagem final.
+addopts = "--cov=app --cov-report=term-missing"
+
+[tool.coverage.run]
+# Testes não precisam testar a si mesmos na métrica de cobertura.
+omit = ["app/tests/*"]

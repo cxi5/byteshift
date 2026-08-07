@@ -1,0 +1,11 @@
+# Versoes fixadas com base no que o pip resolveu de fato no ambiente do
+# projeto (Termux, ago/2026) -- nao sao numeros "chutados".
+#
+# uvicorn SEM o extra [standard]: esse extra traz httptools/uvloop/watchfiles,
+# que precisam compilar codigo Rust e travam em ambientes sem toolchain Rust
+# pronta (foi o caso do Termux). A versao simples roda igual, so sem esses
+# ganhos extras de performance.
+fastapi>=0.141.1
+uvicorn>=0.52.1
+pytest>=9.1.1
+pytest-cov>=7.1.0
