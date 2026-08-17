@@ -8,13 +8,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import context, convert, units
 
 app = FastAPI(
-    title="Unit Converter API",
+    title="ByteShift API",
     description="Conversor de unidades técnicas (armazenamento, velocidade, rede, capacidade de dispositivos).",
-    version="0.1.0",
+    version="1.0.0",
 )
 
-# CORS: por enquanto liberado para localhost em portas comuns de dev server
-# (Live Server, Vite, etc). Ajustar origins na Fase 9 para o domínio de produção.
+# CORS: localhost (dev) + frontend de produção (Vercel)
 origins = [
     "http://localhost",
     "http://localhost:5500",
@@ -43,4 +42,4 @@ app.include_router(context.router)
 
 @app.get("/")
 def hello_world():
-    return {"message": "Unit Converter API no ar"}
+    return {"message": "ByteShift API no ar"}

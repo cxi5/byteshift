@@ -2,7 +2,7 @@
 
 Conversor de unidades técnicas — armazenamento, velocidade de transferência, banda de rede e capacidade de dispositivos — com a mesma lógica de uma calculadora de câmbio: digite um valor numa unidade, veja o equivalente em todas as outras na hora.
 
-Feito com foco em arquitetura limpa, isolamento de domínio e cobertura de testes — não só "funciona na tela".
+Feito como peça de portfólio, com foco em arquitetura limpa, isolamento de domínio e cobertura de testes — não só "funciona na tela".
 
 ## Por quê
 
@@ -74,6 +74,39 @@ unit-converter/
             └── scenario-card.js  # template de card de cenário
 ```
 
+## Como rodar localmente
+
+### Backend
+
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+A API sobe em `http://localhost:8000`. Documentação interativa em `http://localhost:8000/docs`.
+
+Rodar os testes:
+
+```bash
+pytest
+```
+
+(a configuração de cobertura já vem no `pyproject.toml` — `pytest` sozinho já roda com `--cov`)
+
+### Frontend
+
+Precisa ser servido por um servidor HTTP local — **não abra o `index.html` direto no navegador**, os módulos ES não carregam via `file://`.
+
+```bash
+cd frontend
+python3 -m http.server 5500
+```
+
+Acesse `http://localhost:5500`. Se preferir, qualquer servidor estático serve (Live Server do VS Code, `npx serve`, etc.) — só ajuste a porta na lista de origens do CORS em `backend/app/main.py` se for diferente de 5500/5173.
+
 ## Decisões técnicas
 
 - **Isolamento por gênero**: decisão deliberada desde o início do projeto. O custo é mais arquivos; o ganho é que adicionar um 5º gênero no futuro não arrisca quebrar os outros 4.
@@ -89,6 +122,10 @@ unit-converter/
 cd backend
 pytest --cov=app --cov-report=term-missing
 ```
+
+## Deploy
+
+Ver [DEPLOY.md](./DEPLOY.md) para o passo a passo de publicar o backend (Render/Railway) e o frontend (Vercel/Netlify/GitHub Pages).
 
 **API em produção**: https://byteshift-t5oi.onrender.com/
 **Swagger público**: https://byteshift-t5oi.onrender.com/docs
